@@ -1,11 +1,12 @@
 import React from "react";
-import * as S from "./Signup.js";
+import * as S from "./Signup.style.js";
+import bg from "../../asset/img/Back.png";
 
 function Signup() {
     return (
-        <>
-            집에 가고 싶다
-        </>
+        <S.SignupLayout>
+            <S.Bg src={bg}></S.Bg>
+        </S.SignupLayout>
     );
 }
 export default Signup;
