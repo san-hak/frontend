@@ -1,9 +1,16 @@
 import React from "react";
 import * as P from "./PatientCardStyle";
+import { useNavigate } from "react-router-dom";
 
 function PatientCard({ birthDate, koreanName, englishName, gender, testDate }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/main/${encodeURIComponent(englishName)}`);
+  };
+
   return (
-    <P.PatientCardLayout>
+    <P.PatientCardLayout onClick={handleClick}>
       <P.CardBackground gender={gender}>
         <P.PatientInfoDiv>
           <P.BirthDateInfo>{birthDate}</P.BirthDateInfo>
