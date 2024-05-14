@@ -1,7 +1,9 @@
 export const searchByName = (searchTerm, list) => {
   const searchLower = searchTerm.toLowerCase();
-  const filteredList = list.filter((patient) =>
-    patient.koreanName.toLowerCase().includes(searchLower)
+  const filteredList = list.filter(
+    (patient) =>
+      patient.koreanName.toLowerCase().includes(searchLower) ||
+      patient.englishName.toLowerCase().includes(searchLower)
   );
   return filteredList;
 };

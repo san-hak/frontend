@@ -10,30 +10,28 @@ function ResultListInquiry() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState(patientList);
 
-  const handleSearch = () => {
-    const result = searchByName(searchTerm, patientList);
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    const result = searchByName(term, patientList);
     setSearchResult(result);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
   };
 
   return (
     <R.ResultListLayout>
       <R.HeaderContainer>
-        <R.HeaderLogo src={iMirrorLogo} alt="logo" />
+        <R.HeaderLogo
+          src={iMirrorLogo}
+          alt="logo"
+        />
         <R.SearchDiv>
           <R.SearchMent
             type="text"
             placeholder="검색어를 입력해주세요"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onChange={handleSearch}
           />
-          <R.SearchIcon src={searchIcon} alt="검색" onClick={handleSearch} />
+          <R.SearchIcon src={searchIcon} alt="검색" />
         </R.SearchDiv>
         <R.ProfileDiv>
           <R.ProfileName>병원이름</R.ProfileName>
