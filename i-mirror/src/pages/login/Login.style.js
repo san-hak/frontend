@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import bg from "../../asset/img/Back.png";
 
 export const LoginLayout = styled.div`
@@ -38,7 +38,7 @@ export const Logo = styled.img`
 
 export const InputField = styled.form`
     width:100%;
-    height:30vh;
+    height:35vh;
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -46,6 +46,8 @@ export const InputField = styled.form`
 `
 
 export const InputTitle = styled.div`
+    font-weight: 700;
+    margin-right: 15vw;
 `
 
 export const Input = styled.input`
@@ -56,6 +58,7 @@ export const Input = styled.input`
     border: 1px solid rgba(56,60,103,0.15);
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px; 
+    outline: none;
 `
 
 export const Button = styled.button`
@@ -69,8 +72,22 @@ export const Button = styled.button`
     cursor: pointer;
     font-weight:1000;
     font-size:1vw;
+    margin-top: 1vw;
 
     &:hover {
         background-color: #6062AA;
+    }
+`;
+
+export const GoSignup = styled.div`
+    margin-left: 10vw;
+`;
+
+export const Singup = styled.span`
+    color: #383C67;
+    cursor: pointer;
+
+    &:hover {
+        color: blue;
     }
 `;
