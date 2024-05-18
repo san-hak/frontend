@@ -47,7 +47,7 @@ function Agree() {
                         <A.CheckInput type="checkbox" checked={allChecked} onChange={handleAllChecked} />
                         <A.Title>전체 동의하기</A.Title>
                     </A.CheckboxLabel>
-                    <A.Content> 이용약관, 개인정보 수집 및 이용의 동의를 포함합니다.</A.Content>
+                    <A.ExContent> 이용약관, 개인정보 수집 및 이용의 동의를 포함합니다.</A.ExContent>
                     <A.CheckboxLabel>
                         <A.CheckInput type="checkbox" name="terms" checked={checkedItems.terms} onChange={handleItemChecked} />
                         <A.Option>[필수]</A.Option> i-mirror 이용약관

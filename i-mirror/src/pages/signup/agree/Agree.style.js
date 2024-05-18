@@ -36,9 +36,8 @@ export const CheckboxWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-bottom: 20px;
     width: 80%;
-    height: 60%;
+    height: 75%;
     justify-content: space-evenly;
 `;
 
@@ -89,7 +88,7 @@ export const Button = styled.button`
     cursor: pointer;
     font-weight:1000;
     font-size:1vw;
-    margin-top: 1vw;
+    margin-top: -3vw;
 
     &:disabled {
         background-color: #C4C4C4;
@@ -102,6 +101,7 @@ export const Button = styled.button`
 
 export const GoLogin = styled.div`
     margin-left: 10vw;
+    margin-top: -3vw;
 `;
 
 export const Login = styled.span`
@@ -124,6 +124,12 @@ export const Content = styled.div`
     font-size: 0.8vw;
 `
 
+export const ExContent = styled.div`
+    color: #929292;
+    font-size: 0.8vw;
+    margin-top: -2vw;
+`
+
 export const ContentBox = styled.div`
     width:100%;
     height:5vw;
@@ -132,6 +138,7 @@ export const ContentBox = styled.div`
     background-color: rgba(255,255,255,0.8);
     border-radius:5px;
     border: 1px solid rgba(56,60,103,0.15);
+    margin-top: -2vw;
 `
 
 export const Title = styled.span`
