@@ -32,9 +32,13 @@ export const SignupBox = styled.div`
     justify-content: space-around;
 `;
 
+export const Logo = styled.img`
+    width: 15vw;
+`
+
 export const InputField = styled.form`
     width:100%;
-    height:80%;
+    height:35vh;
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -42,8 +46,14 @@ export const InputField = styled.form`
 `;
 
 export const InputTitle = styled.div`
-    font-weight: 700;
     margin-right: 15vw;
+    font-weight:600;
+`;
+
+export const InputTitles = styled.div`
+    margin-right: 7vw;
+    font-weight:600;
+    margin-left: 1vw;
 `;
 
 export const Input = styled.input`
@@ -87,3 +97,74 @@ export const Login = styled.span`
         color: blue;
     }
 `
+
+export const CheckButton = styled.button`
+    width: 8vw;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #3C45A8;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Pretendard', sans-serif;
+    margin-left: 1vw;
+
+    &:hover {
+        background-color: #383C67;
+    }
+`;
+
+export const Inputs = styled.div`
+    display:flex;
+    width:85%;
+    justify-content: center;
+`
+
+export const RadioGroup = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 22vw;
+    margin-left: 2vw;
+    font-weight: 800;
+`;
+
+export const RadioLabel = styled.label`
+    margin-right: 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+`;
+
+export const RadioInput = styled.input`
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+`;
+
+export const RadioCustom = styled.span`
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: #fff;
+    border: 0.5px solid #383C67;
+    border-radius: 50%;
+    margin-right: 5px;
+
+    ${RadioInput}:checked + &::after {
+        content: "";
+        display: block;
+        width: 12px;
+        height: 12px;
+        margin: 2px;
+        background-color: #383C67;
+        border-radius: 50%;
+    }
+`;
+
+export const ErrorMessage = styled.p`
+    color: red;
+    font-size: 12px;
+    margin: 5px 0;
+`;

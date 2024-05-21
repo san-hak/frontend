@@ -46,8 +46,9 @@ export const InputField = styled.form`
 `
 
 export const InputTitle = styled.div`
-    font-weight: 700;
-    margin-right: 15vw;
+    margin-right: 17vw;
+    margin-bottom:-1vw;
+    font-weight:600;
 `
 
 export const Input = styled.input`
