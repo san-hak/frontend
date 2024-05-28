@@ -3,31 +3,47 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./Signup.style.js";
 import { Link } from "react-router-dom";
 import logo from "../../asset/img/Logo.svg";
+import axios from "axios";
 
 function Signup() {
     const navigate = useNavigate();
 
-    const [birthdate, setBirthdate] = useState("");
-    const [gender, setGender] = useState(null);
+    const [birthdate, setBirthDate] = useState("");
+    const [gender, setGender] = useState(true);
     const [name, setName] = useState("");
     const [errors, setErrors] = useState({});
 
-    const validateBirthdate = (birthdate) => {
-        const birthdateRegex = /^\d{8}$/;
-        return birthdateRegex.test(birthdate);
+    const handleBirthChange = (e) => {
+        const { value } = e.target;
+        const formattedValue = formatBirth(value);
+        setBirthDate(formattedValue);
+        setErrors((prev) => ({ ...prev, birthdate: !validateBirth(e.target.value) }));
     };
 
-    const handleBirthdateChange = (e) => {
-        setBirthdate(e.target.value);
-        setErrors((prev) => ({ ...prev, birthdate: !validateBirthdate(e.target.value) }));
+    const formatBirth = (value) => {
+        if (/^\d*$/.test(value)) {
+            if (value.length === 8) {
+                const formattedValue = value.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+                return formattedValue;
+            }
+            return value;
+        }
+        return birthdate;
     };
+
+    const validateBirth = (value) => {
+        if (value.length != 8) {
+            return false;
+        }
+        return true;
+    }
 
     const handleGenderChange = (e) => {
         setGender(e.target.value === "male");
     };
 
     const validateName = (name) => {
-        const nameRegex = /^[가-힣]{3,4}$/;
+        const nameRegex = /^[가-힣]{2,4}$/;
         return nameRegex.test(name);
     };
 
@@ -36,21 +52,32 @@ function Signup() {
         setErrors((prev) => ({ ...prev, name: !validateName(e.target.value) }));
     };
 
-    const handleSignup = () => {
-        if (!errors.birthdate && gender !== null && !errors.name) {
-            // 서버로 보낼 데이터 예시
+    const handleSignup = async () => {
+        if (!errors.name && !errors.birthdate) {
             const signupData = {
-                birthdate,
-                gender,
-                name,
+                memberName: name,
+                isMale: gender,
+                memberBirthDate: birthdate,
+                personalInfoConsent: true,
             };
-            console.log("회원가입 데이터:", signupData);
-            // 여기에 실제 회원가입 API 호출 로직을 추가하세요
-            navigate("/");
+
+            try {
+                const response = await axios.post("http://10.80.162.0:8080/api/auth/register", signupData);
+                if (response.status === 201) {
+                    console.log("회원가입 성공:", response.data);
+                    navigate("/");
+                } else {
+                    alert("오류가 발생했습니다. 다시 할까말까?");
+                }
+            } catch (error) {
+                console.error("회원가입 요청 중 오류 발생:", error);
+                alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
         } else {
             alert("모든 입력 값을 확인해주세요.");
         }
     };
+
     return (
         <S.SignupLayout>
             <S.SignupBox>
@@ -69,7 +96,7 @@ function Signup() {
                         <S.InputTitles>성별</S.InputTitles>
                     </S.Inputs>
                     <S.Inputs>
-                        <S.Input type="text" placeholder="성을 포함한 실명"></S.Input>
+                        <S.Input type="text" id="userName" value={name} onChange={handleNameChange} placeholder="성을 포함한 실명"></S.Input>
                         <S.RadioGroup>
                             <S.RadioLabel>
                                 <S.RadioInput
@@ -95,10 +122,10 @@ function Signup() {
                             </S.RadioLabel>
                         </S.RadioGroup>
                     </S.Inputs>
-                    {errors.name && <S.ErrorMessage>이름은 한글 3~4글자여야 합니다.</S.ErrorMessage>}
-                    <S.InputTitle value={birthdate} onChange={handleBirthdateChange}>생년월일</S.InputTitle>
-                    <S.Input type="text" placeholder="YYYYMMDD" maxLength="8"></S.Input>
-                    {errors.birthdate && <S.ErrorMessage>생년월일은 6자리 숫자여야 합니다.</S.ErrorMessage>}
+                    {errors.name && <S.ErrorMessage>이름은 한글 2~4글자여야 합니다.</S.ErrorMessage>}
+                    <S.InputTitle>생년월일</S.InputTitle>
+                    <S.Input type="text" id="userBirth" value={birthdate} onChange={handleBirthChange} placeholder="YYYYMMDD"></S.Input>
+                    {errors.birthdate && <S.ErrorMessage>생년월일은 8자리 숫자여야 합니다.</S.ErrorMessage>}
                     <S.Button type="submit" onClick={handleSignup}>회원가입</S.Button>
                     <S.GoLogin>이미 계정이 있으신가요?<Link to="/"><S.Login>로그인</S.Login></Link></S.GoLogin>
                 </S.InputField>

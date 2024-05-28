@@ -4,7 +4,7 @@ import bg from "../../asset/img/Back.png";
 export const LoginLayout = styled.div`
     @font-face {
         font-family: 'Pretendard';
-        src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.5/dist/web/static/pretendard.css") format('woff');
+        src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
         font-weight: normal;
         font-style: normal;
     }
