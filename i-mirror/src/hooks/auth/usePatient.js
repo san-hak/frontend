@@ -3,11 +3,12 @@ import axios from "axios";
 const useUser = () => {
   const getPatientList = async ({ page, size }) => {
     const { data } = await axios.get(
-      "http://13.125.31.54/:8080" + `/api/admin?page=${page}&size=${size}`
+      "http://10.80.162.0:8080" + `/api/admin?page=${page}&size=${size}`
     );
+    console.log(data);
     return data;
   };
-
+  console.log(getPatientList);
   return { getPatientList };
 };
 
