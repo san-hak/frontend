@@ -4,16 +4,24 @@ export const ResultListLayout = styled.div`
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  background-color: #fff;
 `;
 
 export const HeaderContainer = styled.div`
   display: flex;
+  position: fixed;
+  z-index: 99;
   align-items: center;
   width: 100.3125rem;
-  height: 3.75rem;
-  margin-top: 2.5rem;
-  margin-bottom: 6.25rem;
+  height: 8.75rem;
   margin-left: 10rem;
+  padding-bottom: 4.25rem;
+  /* background-color: #fff; */
+  background: linear-gradient(
+    rgb(255, 255, 255) 60%,
+    rgb(255, 255, 255, 0.6),
+    rgb(255, 255, 255, 0.1)
+  );
 `;
 
 export const HeaderLogo = styled.img`
@@ -75,11 +83,32 @@ export const CardWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 12.5rem;
 `;
 
 export const CardContainer = styled.div`
   display: grid;
   width: 80.625rem;
   grid-template-columns: repeat(4, 1fr);
+  cursor: pointer;
+`;
+
+export const CardMoreButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+export const CardMoreButton = styled.div`
+  width: 12.5rem;
+  height: 3.75rem;
+  margin-top: 0.625rem;
+  margin-bottom: 3.125rem;
+  background-color: #f0f0f3;
+  font-size: 1.25rem;
+  color: #000;
+  text-align: center;
+  line-height: 3.75rem;
+  border: none;
+  border-radius: 3.125rem;
   cursor: pointer;
 `;
