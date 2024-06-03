@@ -6,8 +6,10 @@ import searchIcon from "../../asset/img/searchIcon.svg";
 import PatientCard from "../../components/PatientCard";
 import { patientList, searchByName } from "../../constant/patientList";
 import useUser from "../../hooks/auth/usePatient";
+import { useNavigate } from "react-router-dom";
 
 function ResultListInquiry() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [patients, setPatients] = useState([]);
@@ -18,6 +20,10 @@ function ResultListInquiry() {
   const [noResult, setNoResult] = useState(false);
 
   const { getPatientList } = useUser();
+
+  const loadMain = () => {
+    window.location.reload();
+  };
 
   //---------
 
@@ -107,7 +113,7 @@ function ResultListInquiry() {
   return (
     <R.ResultListLayout>
       <R.HeaderContainer>
-        <R.HeaderLogo src={iMirrorLogo} alt="logo" />
+        <R.HeaderLogo src={iMirrorLogo} alt="logo" onClick={loadMain} />
         <R.SearchDiv>
           <R.SearchMent
             type="text"

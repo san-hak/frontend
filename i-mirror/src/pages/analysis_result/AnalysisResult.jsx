@@ -4,15 +4,15 @@ import * as A from "./AnalysisResult.Style";
 import { patientList } from "../../constant/patientList";
 
 function AnalysisResult() {
-  const { englishName } = useParams();
+  const { koreanName } = useParams();
   const patient = patientList.find(
-    (patient) => patient.englishName === englishName
+    (patient) => patient.koreanName === koreanName
   );
 
   return (
     <A.AnalysisResultLayout>
       <A.AnalysisResultPaper>
-        <>{patient.englishName}</>
+        {/* <>{patient.englishName}</> */}
         <>{patient.koreanName}</>
       </A.AnalysisResultPaper>
     </A.AnalysisResultLayout>

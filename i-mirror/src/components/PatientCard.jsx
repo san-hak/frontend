@@ -2,7 +2,7 @@ import React from "react";
 import * as P from "./PatientCardStyle";
 import { useNavigate } from "react-router-dom";
 
-function PatientCard({ birthDate, koreanName, englishName, gender, testDate }) {
+function PatientCard({ birthDate, koreanName, gender, testDate }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -15,7 +15,7 @@ function PatientCard({ birthDate, koreanName, englishName, gender, testDate }) {
         <P.PatientInfoDiv>
           <P.BirthDateInfo>{birthDate}</P.BirthDateInfo>
           <P.KoreanNameInfo>{koreanName}</P.KoreanNameInfo>
-          <P.EnglishNameInfo>{englishName}</P.EnglishNameInfo>
+          {/* <P.EnglishNameInfo>{englishName}</P.EnglishNameInfo> */}
           <P.GenderInfo>{gender}</P.GenderInfo>
         </P.PatientInfoDiv>
       </P.CardBackground>
