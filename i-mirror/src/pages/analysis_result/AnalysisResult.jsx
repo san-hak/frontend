@@ -36,7 +36,7 @@ const Scene = () => {
   );
 };
 
-// 여러 문제 부위(?)
+// 여러 문제 부위(?) [ 서버에서 받은 데이터를 표준과 비교해서 차이가 심하다면 => 구체 표시 : 차이가 심하지 않다면 구체 표시X  ]
 const Spheres = () => {
   const spheresData = [
     { position: [0, 0.6, -0.065], size: 0.05 },         // 목 틀어짐
@@ -68,6 +68,8 @@ const CanvasComponent = () => {
     </Canvas>
   );
 };
+
+// 이제 여따가 서버에서 받은 데이터로 차트 처 만들껀데 그래프 하나에 다 때려 처박을까
 
 const AnalysisResult = () => {
   const { koreanName } = useParams();
