@@ -17,14 +17,13 @@ function Signup() {
         const { value } = e.target;
         const formattedValue = formatBirth(value);
         setBirthDate(formattedValue);
-        setErrors((prev) => ({ ...prev, birthdate: !validateBirth(e.target.value) }));
+        setErrors((prev) => ({ ...prev, birthdate: !validateBirth(formattedValue) }));
     };
 
     const formatBirth = (value) => {
         if (/^\d*$/.test(value)) {
             if (value.length === 8) {
-                const formattedValue = value.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-                return formattedValue;
+                return value.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
             }
             return value;
         }
@@ -32,11 +31,9 @@ function Signup() {
     };
 
     const validateBirth = (value) => {
-        if (value.length != 8) {
-            return false;
-        }
-        return true;
-    }
+        const birthRegex = /^\d{4}-\d{2}-\d{2}$/;
+        return birthRegex.test(value);
+    };
 
     const handleGenderChange = (e) => {
         setGender(e.target.value === "male");
@@ -62,12 +59,14 @@ function Signup() {
             };
 
             try {
-                const response = await axios.post("http://10.80.162.0:8080/api/auth/register", signupData);
-                if (response.status === 201) {
+                const response = await axios.post("/api/auth/register", signupData, { withCredentials: true });
+                if (response.status === 201 || response.status === 200) {
                     console.log("회원가입 성공:", response.data);
+                    alert("회원가입에 성공했습니다.");
                     navigate("/");
                 } else {
-                    alert("오류가 발생했습니다. 다시 할까말까?");
+                    alert("오류가 발생했습니다.");
+                    console.log("오류가 발생: ", response.status, response.data);
                 }
             } catch (error) {
                 console.error("회원가입 요청 중 오류 발생:", error);
@@ -81,22 +80,20 @@ function Signup() {
     return (
         <S.SignupLayout>
             <S.SignupBox>
-                <S.Logo src={logo}></S.Logo>
+                <S.Logo src={logo} alt="Logo" />
                 <S.InputField>
-                    {/* <S.InputTitle>아이디</S.InputTitle>
-                    <S.Inputs>
-                        <S.Input type="text" placeholder="4~15자리 / 영문, 숫자 조합"></S.Input>
-                        <S.CheckButton type="button" /* onClick={checkIdAvailability} >중복 확인</S.CheckButton>
-                    </S.Inputs>
-                    <S.InputTitle>비밀번호</S.InputTitle>
-                    <S.Input type="password" placeholder="8~16자리 / 영문, 숫자, 특수문자 조합"></S.Input>
-                    <S.Input type="password" placeholder="비밀번호 확인"></S.Input> */}
                     <S.Inputs>
                         <S.InputTitles>이름</S.InputTitles>
                         <S.InputTitles>성별</S.InputTitles>
                     </S.Inputs>
                     <S.Inputs>
-                        <S.Input type="text" id="userName" value={name} onChange={handleNameChange} placeholder="성을 포함한 실명"></S.Input>
+                        <S.Input
+                            type="text"
+                            id="userName"
+                            value={name}
+                            onChange={handleNameChange}
+                            placeholder="성을 포함한 실명"
+                        />
                         <S.RadioGroup>
                             <S.RadioLabel>
                                 <S.RadioInput
@@ -124,13 +121,22 @@ function Signup() {
                     </S.Inputs>
                     {errors.name && <S.ErrorMessage>이름은 한글 2~4글자여야 합니다.</S.ErrorMessage>}
                     <S.InputTitle>생년월일</S.InputTitle>
-                    <S.Input type="text" id="userBirth" value={birthdate} onChange={handleBirthChange} placeholder="YYYYMMDD"></S.Input>
-                    {errors.birthdate && <S.ErrorMessage>생년월일은 8자리 숫자여야 합니다.</S.ErrorMessage>}
-                    <S.Button type="submit" onClick={handleSignup}>회원가입</S.Button>
-                    <S.GoLogin>이미 계정이 있으신가요?<Link to="/"><S.Login>로그인</S.Login></Link></S.GoLogin>
+                    <S.Input
+                        type="text"
+                        id="userBirth"
+                        value={birthdate}
+                        onChange={handleBirthChange}
+                        placeholder="YYYYMMDD"
+                    />
+                    {errors.birthdate && <S.ErrorMessage>생년월일은 YYYY-MM-DD 형식이어야 합니다.</S.ErrorMessage>}
+                    <S.Button type="button" onClick={handleSignup}>회원가입</S.Button>
+                    <S.GoLogin>
+                        이미 계정이 있으신가요? <Link to="/"><S.Login>로그인</S.Login></Link>
+                    </S.GoLogin>
                 </S.InputField>
             </S.SignupBox>
         </S.SignupLayout>
     );
 }
+
 export default Signup;
