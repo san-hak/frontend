@@ -14,9 +14,8 @@ export const HeaderContainer = styled.div`
   align-items: center;
   width: 100.3125rem;
   height: 8.75rem;
-  margin-left: 10rem;
+  margin-left: 8%;
   padding-bottom: 4.25rem;
-  /* background-color: #fff; */
   background: linear-gradient(
     rgb(255, 255, 255) 60%,
     rgb(255, 255, 255, 0.6),
@@ -35,7 +34,7 @@ export const SearchDiv = styled.div`
   align-items: center;
   width: 62.5rem;
   height: 3.75rem;
-  margin-left: 9.375rem;
+  margin-left: 6%;
   background-color: #f0f0f3;
   border-radius: 2.5rem;
 `;
@@ -43,7 +42,7 @@ export const SearchDiv = styled.div`
 export const SearchMent = styled.input`
   width: 43.75rem;
   height: 3.75rem;
-  margin-left: 3.125rem;
+  margin-left: 6%;
   font-size: 1.25rem;
   color: #000;
   outline: none;
@@ -58,14 +57,14 @@ export const SearchMent = styled.input`
 export const SearchIcon = styled.img`
   width: 1.5625rem;
   height: 1.5625rem;
-  margin-right: 3.125rem;
+  margin-right: 6%;
   cursor: pointer;
 `;
 
 export const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 9.375rem;
+  margin-left: 6%;
 `;
 
 export const ProfileName = styled.div`

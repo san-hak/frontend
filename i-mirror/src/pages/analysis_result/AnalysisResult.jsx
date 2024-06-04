@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as A from "./AnalysisResult.Style";
 import { patientList } from "../../constant/patientList";
+import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
 
 const Scene = () => {
   const { scene } = useGLTF("/models/MDA_man.glb");
@@ -40,8 +41,8 @@ const Scene = () => {
 const Spheres = () => {
   const spheresData = [
     { position: [0, 0.6, -0.065], size: 0.05 }, // 목 틀어짐
-    { position: [-0.05, 0.53, -0.04], size: 0.075 }, // 왼쪽 어깨 내려감
-    { position: [0.05, 0.53, -0.04], size: 0.075 }, // 오른쪽 어깨 내려감
+    { position: [-0.08, -0.45, 0.04], size: 0.075 }, // 왼쪽 무릎 틀어짐
+    { position: [0.08, -0.45, 0.04], size: 0.075 }, // 오른쪽 무릎 틀어짐
     { position: [-0.15, 0.53, -0.04], size: 0.075 }, // 왼쪽 어깨 말림
     { position: [0.15, 0.53, -0.04], size: 0.075 }, // 오른쪽 어깨 말림
     { position: [-0.15, 0, -0.02], size: 0.075 }, // 왼쪽 다리가 왼쪽보다 짧음
@@ -60,12 +61,13 @@ const CanvasComponent = () => {
   const canvasRef = useRef();
 
   return (
-    <Canvas
-      style={{ width: "50%", height: "50vh", border: "1px solid red" }}
-      camera={{ position: [0, 0, 3], fov: 50 }}
-    >
-      <Scene />
-    </Canvas>
+    <A.AvatarLayout>
+      <A.AvatarContainer>
+        <Canvas camera={{ position: [0, 0, 3], fov: 40 }}>
+          <Scene />
+        </Canvas>
+      </A.AvatarContainer>
+    </A.AvatarLayout>
   );
 };
 
@@ -81,8 +83,24 @@ const AnalysisResult = () => {
     <A.AnalysisResultLayout>
       <A.AnalysisResultContainer>
         <A.AnalysisResultPaper>
-          <>{patient.koreanName}</>
+          <A.AnalysisResultHeaderContainer>
+            <A.HeaderLogo src={iMirrorLogo} alt="logo" />
+            <A.HeaderTitle>Analysis Result</A.HeaderTitle>
+            <A.PatientInfoDiv>
+              <A.NameLabel>NAME: </A.NameLabel>
+              <A.PatientName>{patient.koreanName}</A.PatientName>
+              <A.BirthDateLabel>BIRTHDATE: </A.BirthDateLabel>
+              <A.PatientBirthDate>{patient.birthDate}</A.PatientBirthDate>
+              <A.GenderLabel>GENDER: </A.GenderLabel>
+              <A.PatientGender>{patient.gender}</A.PatientGender>
+              <A.PatientTestDate>{patient.testDate}</A.PatientTestDate>
+            </A.PatientInfoDiv>
+          </A.AnalysisResultHeaderContainer>
+          <A.LineDiv>
+            <A.Line />
+          </A.LineDiv>
           <CanvasComponent />
+          <div>{/*그그그극그 뭐달 그 표 넣자*/}</div>
         </A.AnalysisResultPaper>
         <A.AnalysisResultPaper>22</A.AnalysisResultPaper>
       </A.AnalysisResultContainer>
