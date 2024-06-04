@@ -22,15 +22,16 @@ function Login() {
                 {
                     memberName: name,
                     memberBirthDate: birth,
-                },
-                { withCredentials: true }
+                }
             );
             if (response.status === 200) {
                 const result = response.data;
                 sessionStorage.setItem("name", result.memberName);
                 sessionStorage.setItem("role", result.role);
-                sessionStorage.setItem("sessionId", result.sessionId);
                 console.log("로그인 성공, 이름:" + result.memberName);
+
+                // setCookie("sessionId", sessionId, { path: '/' });
+                console.log(document.cookie);
                 navigate("/main");
             } else {
                 setLoginCheck(true);
