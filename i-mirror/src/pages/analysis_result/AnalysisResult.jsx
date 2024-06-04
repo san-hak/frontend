@@ -7,7 +7,7 @@ import * as A from "./AnalysisResult.Style";
 import { patientList } from "../../constant/patientList";
 
 const Scene = () => {
-  const { scene } = useGLTF('/models/MDA_man.glb');
+  const { scene } = useGLTF("/models/MDA_man.glb");
   const modelRef = useRef();
   const { camera, gl } = useThree();
 
@@ -39,13 +39,13 @@ const Scene = () => {
 // 여러 문제 부위(?) [ 서버에서 받은 데이터를 표준과 비교해서 차이가 심하다면 => 구체 표시 : 차이가 심하지 않다면 구체 표시X  ]
 const Spheres = () => {
   const spheresData = [
-    { position: [0, 0.6, -0.065], size: 0.05 },         // 목 틀어짐
-    { position: [-0.05, 0.53, -0.04], size: 0.075 },    // 왼쪽 어깨 내려감
-    { position: [0.05, 0.53, -0.04], size: 0.075 },     // 오른쪽 어깨 내려감
-    { position: [-0.15, 0.53, -0.04], size: 0.075 },    // 왼쪽 어깨 말림
-    { position: [0.15, 0.53, -0.04], size: 0.075 },     // 오른쪽 어깨 말림
-    { position: [-0.15, 0, -0.02], size: 0.075 },       // 왼쪽 다리가 왼쪽보다 짧음
-    { position: [0.15, 0, -0.02], size: 0.075 },        // 오른쪽 다리가 왼쪽보다 짧음
+    { position: [0, 0.6, -0.065], size: 0.05 }, // 목 틀어짐
+    { position: [-0.05, 0.53, -0.04], size: 0.075 }, // 왼쪽 어깨 내려감
+    { position: [0.05, 0.53, -0.04], size: 0.075 }, // 오른쪽 어깨 내려감
+    { position: [-0.15, 0.53, -0.04], size: 0.075 }, // 왼쪽 어깨 말림
+    { position: [0.15, 0.53, -0.04], size: 0.075 }, // 오른쪽 어깨 말림
+    { position: [-0.15, 0, -0.02], size: 0.075 }, // 왼쪽 다리가 왼쪽보다 짧음
+    { position: [0.15, 0, -0.02], size: 0.075 }, // 오른쪽 다리가 왼쪽보다 짧음
   ];
 
   return spheresData.map((sphere, index) => (
@@ -61,7 +61,7 @@ const CanvasComponent = () => {
 
   return (
     <Canvas
-      style={{ width: '50%', height: '50vh', border: '1px solid red' }}
+      style={{ width: "50%", height: "50vh", border: "1px solid red" }}
       camera={{ position: [0, 0, 3], fov: 50 }}
     >
       <Scene />
@@ -79,10 +79,13 @@ const AnalysisResult = () => {
 
   return (
     <A.AnalysisResultLayout>
-      <A.AnalysisResultPaper>
-        <>{patient.koreanName}</>
-        <CanvasComponent />
-      </A.AnalysisResultPaper>
+      <A.AnalysisResultContainer>
+        <A.AnalysisResultPaper>
+          <>{patient.koreanName}</>
+          <CanvasComponent />
+        </A.AnalysisResultPaper>
+        <A.AnalysisResultPaper>22</A.AnalysisResultPaper>
+      </A.AnalysisResultContainer>
     </A.AnalysisResultLayout>
   );
 };
