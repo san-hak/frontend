@@ -91,7 +91,6 @@ export const AnalysisResultPaper = styled.div`
   height: 70rem;
   background-color: #fff;
   box-shadow: 0.0625rem 0.25rem 1rem rgb(0, 0, 0, 0.3);
-  /*그림자를 넣도록래.*/
 `;
 
 //아바타
@@ -102,7 +101,33 @@ export const AvatarLayout = styled.div`
 `;
 
 export const AvatarContainer = styled.div`
-  width: 30rem;
-  height: 30rem;
+  width: 28rem;
+  height: 28rem;
   background-color: #fff;
+  cursor: pointer;
+`;
+
+//결과 테이블
+export const ResultTableContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4%;
+`;
+
+export const ResultTable = styled.table`
+  width: 43.75rem;
+  height: 400px;
+  border: 0.0625rem solid #000;
+  border-collapse: collapse;
+`;
+
+export const ResultTr = styled.tr`
+  background-color: ${(props) =>
+    props.index % 2 === 0 ? "#f2f2f2" : "#ffffff"};
+`;
+
+export const ResultTd = styled.td`
+  border: 0.0625rem solid #3c45a8;
+  text-align: center;
 `;

@@ -47,6 +47,8 @@ const Spheres = () => {
     { position: [0.15, 0.53, -0.04], size: 0.075 }, // 오른쪽 어깨 말림
     { position: [-0.15, 0, -0.02], size: 0.075 }, // 왼쪽 다리가 왼쪽보다 짧음
     { position: [0.15, 0, -0.02], size: 0.075 }, // 오른쪽 다리가 왼쪽보다 짧음
+    // { position: [-0.08, -0.85, -0.005], size: 0.065 }, // 왼쪽 발목 틀어짐
+    // { position: [0.08, -0.85, -0.005], size: 0.065 }, // 오른쪽 발목 틀어짐
   ];
 
   return spheresData.map((sphere, index) => (
@@ -100,11 +102,73 @@ const AnalysisResult = () => {
             <A.Line />
           </A.LineDiv>
           <CanvasComponent />
-          <div>{/*그그그극그 뭐달 그 표 넣자*/}</div>
+          <A.ResultTableContainer>
+            <ResultTable />
+          </A.ResultTableContainer>
         </A.AnalysisResultPaper>
         <A.AnalysisResultPaper>22</A.AnalysisResultPaper>
       </A.AnalysisResultContainer>
     </A.AnalysisResultLayout>
+  );
+};
+
+const ResultTable = () => {
+  const { koreanName } = useParams();
+  const patient = patientList.find(
+    (patient) => patient.koreanName === koreanName
+  );
+
+  return (
+    <A.ResultTable>
+      <A.ResultTr>
+        <A.ResultTd>1</A.ResultTd>
+        <A.ResultTd>목 틀어짐</A.ResultTd>
+        <A.ResultTd>앞으로 기울어짐</A.ResultTd>
+        <A.ResultTd>{patient.neck.neckTwisted}</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>2</A.ResultTd>
+        <A.ResultTd>어깨 말림</A.ResultTd>
+        <A.ResultTd>앞으로 말림</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>3</A.ResultTd>
+        <A.ResultTd>어깨 틀어짐</A.ResultTd>
+        <A.ResultTd>왼쪽 내려감</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>4</A.ResultTd>
+        <A.ResultTd>허리 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>20</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>5</A.ResultTd>
+        <A.ResultTd>골반 틀어짐</A.ResultTd>
+        <A.ResultTd>왼쪽다리가 긺</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>6</A.ResultTd>
+        <A.ResultTd>엉덩이 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>7</A.ResultTd>
+        <A.ResultTd>무릎 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>8</A.ResultTd>
+        <A.ResultTd>발목 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+    </A.ResultTable>
   );
 };
 

@@ -1,18 +1,17 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import * as R from "./ResultListInquiry.Style";
 import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
 import profileImg from "../../asset/img/profileImg.svg";
 import searchIcon from "../../asset/img/searchIcon.svg";
 import PatientCard from "../../components/PatientCard";
-import { patientList, searchByName } from "../../constant/patientList";
 import useUser from "../../hooks/auth/usePatient";
 import { useNavigate } from "react-router-dom";
 
 function ResultListInquiry() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
   const [patients, setPatients] = useState([]);
+  const [filteredPatients, setFilteredPatients] = useState([]);
   const [page, setPage] = useState(0);
   const [size] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,89 +24,46 @@ function ResultListInquiry() {
     window.location.reload();
   };
 
-  //slice로 바꾸자,,,
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     const patients = await getPatientList({ page, size });
-  //     setSearchResult(patients.content);
-  //   };
-  //   fetchUser();
-  // }, [getPatientList, page, size]);
+  useEffect(() => {
+    const fetchPatients = async () => {
+      setIsLoading(true);
+      const data = await getPatientList({ page, size });
+      if (data && data.content) {
+        setPatients((prevPatients) => [...prevPatients, ...data.content]);
+        setMoreCard(data.content.length === size);
+      }
+      setIsLoading(false);
+    };
 
-  //---------
+    fetchPatients();
+  }, [page, size]);
 
   useEffect(() => {
-    const initialPatients = patientList.slice(0, size);
-    setPatients(initialPatients);
-    setMoreCard(patientList.length > size);
-  }, [size]);
-
-  const loadMorePatient = () => {
-    setIsLoading(true);
-    const newPage = page + 1;
-    const newPatients = patientList.slice(newPage * size, (newPage + 1) * size);
-    setPatients((prevPatients) => [...prevPatients, ...newPatients]);
-    setPage(newPage);
-    setIsLoading(false);
-    if ((newPage + 1) * size >= patientList.length) {
-      setMoreCard(false);
+    if (searchTerm === "") {
+      setFilteredPatients(patients);
+    } else {
+      const result = patients.filter((patient) =>
+        patient.koreanName.includes(searchTerm)
+      );
+      setFilteredPatients(result);
+      setNoResult(result.length === 0);
     }
-  };
+  }, [searchTerm, patients]);
 
   const handleLoadMore = () => {
     if (!isLoading && moreCard) {
-      loadMorePatient();
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
   const handleSearch = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
+    setSearchTerm(e.target.value);
     setPage(0);
     setNoResult(false);
     setMoreCard(true);
-
-    if (term === "") {
-      setSearchResult([]);
-      setNoResult(false);
-      setPatients(patientList.slice(0, size));
-      setMoreCard(patientList.length > size);
-    } else {
-      const result = searchByName(term, patientList);
-      setSearchResult(result.slice(0, size));
-      setPatients(result.slice(0, size));
-      if (result.length === 0) {
-        setNoResult(true);
-        setMoreCard(false);
-      } else {
-        setNoResult(false);
-        setMoreCard(result.length > size);
-      }
-    }
   };
 
-  const moreSearchResult = () => {
-    setIsLoading(true);
-    const newPage = page + 1;
-    const newResult = searchByName(searchTerm, patientList).slice(
-      newPage * size,
-      (newPage + 1) * size
-    );
-    setSearchResult((prevResult) => [...prevResult, ...newResult]);
-    setPage(newPage);
-    setIsLoading(false);
-    if ((newPage + 1) * size >= searchByName(searchTerm, patientList).length) {
-      setMoreCard(false);
-    }
-  };
-
-  const handleLoadMoreSearchResult = () => {
-    if (!isLoading && moreCard) {
-      moreSearchResult();
-    }
-  };
-
-  const displayPatients = searchTerm ? searchResult : patients;
+  const displayPatients = searchTerm ? filteredPatients : patients;
 
   return (
     <R.ResultListLayout>
@@ -134,31 +90,16 @@ function ResultListInquiry() {
               key={index}
               birthDate={patient.birthDate}
               koreanName={patient.koreanName}
-              // englishName={patient.englishName}
               gender={patient.gender}
               testDate={patient.testDate}
             />
           ))}
         </R.CardContainer>
-        {/* <R.CardContainer>
-          {searchResult.map((patient, index) => (
-            <PatientCard
-              key={index}
-              koreanName={patient.memberName}
-              gender={patient.memberGender}
-              birthDate={patient.memberBirthDate}
-            />
-          ))} */}
-
-        {/*patientList or searchResult*/}
-        {/* </R.CardContainer> */}
       </R.CardWrapper>
       <R.CardMoreButtonDiv>
         {noResult && <div>검색 결과가 없습니다.</div>}
         {!noResult && moreCard && (
-          <R.CardMoreButton
-            onClick={searchTerm ? handleLoadMoreSearchResult : handleLoadMore}
-          >
+          <R.CardMoreButton onClick={handleLoadMore}>
             {isLoading ? "로딩중..." : "더보기"}
           </R.CardMoreButton>
         )}

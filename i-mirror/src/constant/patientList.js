@@ -15,47 +15,61 @@ export const patientList = [
     englishName: "HongRoadDong",
     gender: "남성",
     testDate: "2024.05.02 (월)",
-    // rom: {
-    //   sagittalNeckUpperAngle: 0,
-    //   sagittalNeckLowerAngle: 0,
-    //   frontalNeckLeftAngle: 0,
-    //   frontalNeckRightAngle: 0,
-    //   horizontalLeftArmUpperAngle: 0,
-    //   horizontalLeftArmLowerAngle: 0,
-    //   horizontalRightArmUpperAngle: 0,
-    //   horizontalRightArmLowerAngle: 0,
-    //   sagittalLeftArmFrontAngle: 0,
-    //   sagittalLeftArmRearAngle: 0,
-    //   sagittalRightArmFrontAngle: 0,
-    //   sagittalRightArmRearAngle: 0,
-    //   frontalLeftArmOuterAngle: 0,
-    //   frontalLeftArmInnerAngle: 0,
-    //   frontalRightArmOuterAngle: 0,
-    //   frontalRightArmInnerAngle: 0,
-    //   sagittalWaistRearAngle: 0,
-    //   sagittalWaistFrontAngle: 0,
-    //   frontalWaistLeftAngle: 0,
-    //   frontalWaistRightAngle: 0,
-    //   leftKneeRearAngle: 0,
-    //   rightKneeRearAngle: 0,
-    // },
-    // balance: {
-    //   headTwisted: "normal",
-    //   shoulderTwisted: "normal",
-    //   pelvisTwisted: "normal",
-    //   neckTwisted: "normal",
-    //   shoulderRolled: "normal",
-    //   leftShoulderAngle: 0,
-    //   rightShoulderAngle: 0,
-    //   leftHipAngle: 0,
-    //   rightHipAngle: 0,
-    //   leftKneeAngle: 0,
-    //   rightKneeAngle: 0,
-    //   leftAnkleAngle: 0,
-    //   rightAnkleAngle: 0,
-    //   neckAngle: 0,
-    //   waistAngle: 0,
-    // },
+
+    head: {
+      //머리
+      headTwisted: 30,
+    },
+
+    neck: {
+      //목
+      neckTwisted: 18,
+      sagittalNeckUpperAngle: 30,
+      sagittalNeckLowerAngle: 40,
+      frontalNeckLeftAngle: 20,
+      frontalNeckRightAngle: 20,
+    },
+
+    shoulder: {
+      //어깨
+      shoulderTwisted: 26,
+      shoulderRolled: 18,
+    },
+
+    arm: {
+      //팔
+      horizontalLeftArmUpperAngle: 25,
+      horizontalLeftArmLowerAngle: 25,
+      horizontalRightArmUpperAngle: 30,
+      horizontalRightArmLowerAngle: 30,
+      sagittalLeftArmFrontAngle: 15,
+      sagittalLeftArmRearAngle: 15,
+      sagittalRightArmFrontAngle: 22,
+      sagittalRightArmRearAngle: 22,
+      frontalLeftArmOuterAngle: 14,
+      frontalLeftArmInnerAngle: 14,
+      frontalRightArmOuterAngle: 20,
+      frontalRightArmInnerAngle: 20,
+    },
+
+    waist: {
+      //허리
+      sagittalWaistRearAngle: 15,
+      sagittalWaistFrontAngle: 15,
+      frontalWaistLeftAngle: 16,
+      frontalWaistRightAngle: 21,
+    },
+
+    pelvis: {
+      //골반
+      pelvisTwisted: 26,
+    },
+
+    knee: {
+      //무릎
+      leftKneeRearAngle: 21,
+      rightKneeRearAngle: 30,
+    },
   },
   {
     birthDate: "1999.06.18",
