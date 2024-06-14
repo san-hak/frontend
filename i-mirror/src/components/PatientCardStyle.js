@@ -24,7 +24,7 @@ export const CardBackground = styled.div`
   height: 8.125rem;
   background-size: cover;
   background-image: ${({ gender }) =>
-    gender === "남성"
+    gender === "남자"
       ? `url(${manCardBackground})`
       : `url(${womanCardBackground})`};
 `;

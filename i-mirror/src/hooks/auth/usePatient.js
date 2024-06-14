@@ -6,11 +6,7 @@ const useUser = () => {
 
   const getPatientList = async ({ page, size }) => {
     try {
-      const { data } = await axios.get(`/api/admin?page=${page}&size=${size}`, {
-        headers: {
-          Cookies: "SESSION=ZDhmOTI4YjgtZTk3MC00YWFlLTk5YzQtNjYxZTNhNDk1MTBk",
-        },
-      });
+      const { data } = await axios.get(`/api/admin?page=${page}&size=${size}`);
       return data;
     } catch (error) {
       setError(error.response ? error.response.data : error.message);

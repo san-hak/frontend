@@ -5,14 +5,15 @@ import profileImg from "../../asset/img/profileImg.svg";
 import searchIcon from "../../asset/img/searchIcon.svg";
 import PatientCard from "../../components/PatientCard";
 import useUser from "../../hooks/auth/usePatient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function ResultListInquiry() {
   const navigate = useNavigate();
+  const { pageParam } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
   const [size] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const [moreCard, setMoreCard] = useState(false);
@@ -24,29 +25,40 @@ function ResultListInquiry() {
     window.location.reload();
   };
 
-  useEffect(() => {
-    const fetchPatients = async () => {
-      setIsLoading(true);
-      const data = await getPatientList({ page, size });
+  const fetchPatients = async (reset = false) => {
+    setIsLoading(true);
+    try {
+      const data = await getPatientList({ page: reset ? 1 : page, size });
       if (data && data.content) {
-        setPatients((prevPatients) => [...prevPatients, ...data.content]);
+        setPatients((prevPatients) =>
+          reset ? data.content : [...prevPatients, ...data.content]
+        );
         setMoreCard(data.content.length === size);
+        if (reset) setPage(1);
       }
+    } catch (error) {
+      console.error("Error fetching patients:", error);
+    } finally {
       setIsLoading(false);
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchPatients();
   }, [page, size]);
 
   useEffect(() => {
     if (searchTerm === "") {
       setFilteredPatients(patients);
+      setNoResult(false);
+      setMoreCard(patients.length >= size);
     } else {
       const result = patients.filter((patient) =>
         patient.koreanName.includes(searchTerm)
       );
       setFilteredPatients(result);
       setNoResult(result.length === 0);
+      setMoreCard(false);
     }
   }, [searchTerm, patients]);
 
@@ -58,9 +70,8 @@ function ResultListInquiry() {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setPage(0);
-    setNoResult(false);
-    setMoreCard(true);
+    setPage(1);
+    fetchPatients(true);
   };
 
   const displayPatients = searchTerm ? filteredPatients : patients;
@@ -88,10 +99,10 @@ function ResultListInquiry() {
           {displayPatients.map((patient, index) => (
             <PatientCard
               key={index}
-              birthDate={patient.birthDate}
-              koreanName={patient.koreanName}
-              gender={patient.gender}
-              testDate={patient.testDate}
+              birthDate={patient.memberBirthDate}
+              koreanName={patient.memberName}
+              gender={patient.isMale ? "남자" : "여자"}
+              testDate={patient.recentTestDate}
             />
           ))}
         </R.CardContainer>
