@@ -80,9 +80,16 @@ export const ProfileImg = styled.img`
 
 export const CardWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: 12.5rem;
+`;
+
+export const ResultCountMent = styled.div`
+  margin-left: auto;
+  margin-right: 13.75rem;
+  margin-bottom: 1%;
 `;
 
 export const CardContainer = styled.div`

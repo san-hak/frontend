@@ -11,13 +11,14 @@ function ResultListInquiry() {
   const navigate = useNavigate();
   const { pageParam } = useParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const [patients, setPatients] = useState([]);
+  const [allPatients, setAllPatients] = useState([]); // 모든 유저 데이터
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [page, setPage] = useState(pageParam ? parseInt(pageParam) : 1);
   const [size] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const [moreCard, setMoreCard] = useState(false);
   const [noResult, setNoResult] = useState(false);
+  const [resultCount, setResultCount] = useState(0); // 검색 결과 개수
 
   const { getPatientList } = useUser();
 
@@ -25,16 +26,14 @@ function ResultListInquiry() {
     window.location.reload();
   };
 
-  const fetchPatients = async (reset = false) => {
+  const fetchAllPatients = async () => {
     setIsLoading(true);
     try {
-      const data = await getPatientList({ page: reset ? 1 : page, size });
+      const data = await getPatientList({ page: 1, size: 10000 }); // 모든 유저 데이터 요청
       if (data && data.content) {
-        setPatients((prevPatients) =>
-          reset ? data.content : [...prevPatients, ...data.content]
-        );
-        setMoreCard(data.content.length === size);
-        if (reset) setPage(1);
+        setAllPatients(data.content);
+        setFilteredPatients(data.content.slice(0, size));
+        setMoreCard(data.content.length > size);
       }
     } catch (error) {
       console.error("Error fetching patients:", error);
@@ -44,23 +43,25 @@ function ResultListInquiry() {
   };
 
   useEffect(() => {
-    fetchPatients();
-  }, [page, size]);
+    fetchAllPatients();
+  }, []);
 
   useEffect(() => {
     if (searchTerm === "") {
-      setFilteredPatients(patients);
+      setFilteredPatients(allPatients.slice(0, page * size));
       setNoResult(false);
-      setMoreCard(patients.length >= size);
+      setMoreCard(allPatients.length > page * size);
     } else {
-      const result = patients.filter((patient) =>
-        patient.koreanName.includes(searchTerm)
+      const result = allPatients.filter(
+        (patient) =>
+          patient.memberName && patient.memberName.includes(searchTerm)
       );
-      setFilteredPatients(result);
+      setFilteredPatients(result.slice(0, page * size));
       setNoResult(result.length === 0);
-      setMoreCard(false);
+      setResultCount(result.length); // 검색 결과 개수 업데이트
+      setMoreCard(result.length > page * size);
     }
-  }, [searchTerm, patients]);
+  }, [searchTerm, allPatients, page, size]);
 
   const handleLoadMore = () => {
     if (!isLoading && moreCard) {
@@ -71,10 +72,7 @@ function ResultListInquiry() {
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
     setPage(1);
-    fetchPatients(true);
   };
-
-  const displayPatients = searchTerm ? filteredPatients : patients;
 
   return (
     <R.ResultListLayout>
@@ -95,8 +93,11 @@ function ResultListInquiry() {
         </R.ProfileDiv>
       </R.HeaderContainer>
       <R.CardWrapper>
+        {searchTerm && resultCount > 0 && (
+          <R.ResultCountMent>총 {resultCount}건의 검색결과</R.ResultCountMent>
+        )}
         <R.CardContainer>
-          {displayPatients.map((patient, index) => (
+          {filteredPatients.map((patient, index) => (
             <PatientCard
               key={index}
               birthDate={patient.memberBirthDate}
