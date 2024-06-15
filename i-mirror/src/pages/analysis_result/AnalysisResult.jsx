@@ -6,6 +6,7 @@ import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as A from "./AnalysisResult.Style";
 import { patientList } from "../../constant/patientList";
 import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
+import Chart from "../../components/Chart";
 
 // Scene Component
 const Scene = () => {
@@ -86,7 +87,7 @@ const ResultTable = () => {
         <A.ResultTd>1</A.ResultTd>
         <A.ResultTd>목 틀어짐</A.ResultTd>
         <A.ResultTd>앞으로 기울어짐</A.ResultTd>
-        <A.ResultTd>{patient.neck.neckTwisted}</A.ResultTd>
+        <A.ResultTd>{patient.neckTwisted}</A.ResultTd>
       </A.ResultTr>
       <A.ResultTr>
         <A.ResultTd>2</A.ResultTd>
@@ -169,8 +170,8 @@ const AnalysisResult = () => {
           <A.ResultTableContainer>
             <ResultTable />
           </A.ResultTableContainer>
+          <Chart name={patient.koreanName} birth={patient.birthDate} />
         </A.AnalysisResultPaper>
-        <A.AnalysisResultPaper>Additional Information</A.AnalysisResultPaper>
       </A.AnalysisResultContainer>
     </A.AnalysisResultLayout>
   );
