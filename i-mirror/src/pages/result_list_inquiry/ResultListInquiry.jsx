@@ -6,6 +6,9 @@ import searchIcon from "../../asset/img/searchIcon.svg";
 import PatientCard from "../../components/PatientCard";
 import useUser from "../../hooks/auth/usePatient";
 import { useNavigate, useParams } from "react-router-dom";
+import logoutImg from "../../asset/img/logout.svg";
+import logout from "../../hooks/auth/logout";
+import Logout from "../../hooks/auth/logout";
 
 function ResultListInquiry() {
   const navigate = useNavigate();
@@ -19,6 +22,8 @@ function ResultListInquiry() {
   const [moreCard, setMoreCard] = useState(false);
   const [noResult, setNoResult] = useState(false);
   const [resultCount, setResultCount] = useState(0); // 검색 결과 개수
+
+  const [isOpen, setIsOpen] = useState(false); //모달을 열어요
 
   const { getPatientList } = useUser();
 
@@ -74,6 +79,11 @@ function ResultListInquiry() {
     setPage(1);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <R.ResultListLayout>
       <R.HeaderContainer>
@@ -87,9 +97,15 @@ function ResultListInquiry() {
           />
           <R.SearchIcon src={searchIcon} alt="검색" />
         </R.SearchDiv>
-        <R.ProfileDiv>
+        <R.ProfileDiv onClick={() => setIsOpen(!isOpen)}>
           <R.ProfileName>병원이름</R.ProfileName>
           <R.ProfileImg src={profileImg} alt="사진" />
+          {isOpen && (
+            <R.LogoutLayout onClick={handleLogout}>
+              <R.LogoutImg src={logoutImg} />
+              로그아웃
+            </R.LogoutLayout>
+          )}
         </R.ProfileDiv>
       </R.HeaderContainer>
       <R.CardWrapper>
