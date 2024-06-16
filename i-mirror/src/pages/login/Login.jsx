@@ -29,10 +29,11 @@ function Login() {
                 sessionStorage.setItem("name", result.memberName);
                 sessionStorage.setItem("role", result.role);
                 console.log("로그인 성공, 이름:" + result.memberName);
-
-                // setCookie("sessionId", sessionId, { path: '/' });
-                console.log(document.cookie);
-                navigate("/main");
+                if (response.data.role === "ROLE_ADMIN"){
+                    navigate("/admin");
+                } else {
+                    navigate("/main");
+                }
             } else {
                 setLoginCheck(true);
             }
