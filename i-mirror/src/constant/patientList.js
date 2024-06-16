@@ -48,7 +48,7 @@ export const patientList = [
     koreanName: "홍길동",
     englishName: "HongRoadDong",
     gender: "남성",
-    sagittalNeckUpperAngle: 45,
+    sagittalNeckUpperAngle: null,
     sagittalNeckLowerAngle: 34,
     frontalNeckLeftAngle: 23,
     frontalNeckRightAngle: 54,

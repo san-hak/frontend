@@ -49,17 +49,22 @@ const Chart = ({ name, birth }) => {
 
         const createdAt = data.map(item => item.createdAt);
 
-        const createChartData = (key) => ({
-          labels: createdAt,
-          datasets: [{
-            label: key,
-            data: data.map(item => item[key]),
-            fill: false,
-            backgroundColor: 'rgba(75, 192, 192, 0.4)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
-          }],
-        });
+        const createChartData = (key) => {
+          const filteredData = data.filter(item => item[key] !== null);
+          const filteredCreatedAt = filteredData.map(item => item.createdAt);
+
+          return {
+            labels: filteredCreatedAt,
+            datasets: [{
+              label: key,
+              data: filteredData.map(item => item[key]),
+              fill: false,
+              backgroundColor: 'rgba(75, 192, 192, 0.4)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+            }],
+          };
+        };
 
         const generatedCharts = keys.map(key => ({
           label: key,
