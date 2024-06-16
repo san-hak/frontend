@@ -6,7 +6,7 @@ function PatientCard({ birthDate, koreanName, gender, testDate }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/analysis-result/${encodeURIComponent(koreanName)}`);
+    navigate(`/analysis-result/${koreanName}/${birthDate}`);
   };
 
   return (

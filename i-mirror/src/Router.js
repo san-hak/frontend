@@ -10,7 +10,7 @@ function Router() {
         <Route path="/" element={<h1>Hello World</h1>} />
         <Route path="/main" element={<ResultListInquiry />} />
         <Route
-          path="/analysis-result/:koreanName"
+          path="/analysis-result/:koreanName/:birthDate"
           element={<AnalysisResult />}
         />
       </Routes>

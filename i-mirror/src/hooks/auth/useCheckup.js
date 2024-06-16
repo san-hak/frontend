@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const useCheckup = () => {
-  const getCheckup = async () => {
+  const getCheckup = async (name, birth) => {
     try {
-      const { data } = await axios.get(`/api/admin/checkup/[name]/[birth]`);
+      const { data } = await axios.get(`/api/admin/checkup/${name}/${birth}`);
       return data;
     } catch (error) {
-      return console.error("Error fetching patients:", error);
+      console.error("Error fetching checkup:", error);
       throw error;
     }
   };

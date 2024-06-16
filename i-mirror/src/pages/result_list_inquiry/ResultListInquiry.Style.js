@@ -65,6 +65,7 @@ export const ProfileDiv = styled.div`
   display: flex;
   align-items: center;
   margin-left: 6%;
+  cursor: pointer;
 `;
 
 export const ProfileName = styled.div`
@@ -118,3 +119,23 @@ export const CardMoreButton = styled.div`
   border-radius: 3.125rem;
   cursor: pointer;
 `;
+
+export const LogoutLayout = styled.div`
+  position: absolute;
+  margin-top: 4.2rem;
+  margin-left: -2.5rem;
+  width: 10rem;
+  height: 2.5rem;
+  background-color: #F0F0F3;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #DB5D5D;
+`
+
+export const LogoutImg = styled.img`
+  width: 1rem;
+  height: 1rem;
+  margin-right: 5px;
+`
