@@ -1,14 +1,158 @@
-import React, { useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as A from "./AnalysisResult.Style";
-import { patientList } from "../../constant/patientList";
 import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
+import useCheckup from "../../hooks/auth/useCheckup";
 import Chart from "../../components/Chart";
 
-// Scene Component
+const AnalysisResult = () => {
+  const { koreanName, birthDate } = useParams();
+  const [patient, setPatient] = useState(null);
+  const { getCheckup } = useCheckup();
+
+  useEffect(() => {
+    const fetchCheckup = async () => {
+      try {
+        const data = await getCheckup(koreanName, birthDate);
+        setPatient(data);
+      } catch (error) {
+        console.error("Error fetching checkup:", error);
+      }
+    };
+
+    fetchCheckup();
+  }, [koreanName, birthDate, getCheckup]);
+
+  if (!patient) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <A.AnalysisResultLayout>
+      <A.AnalysisResultContainer>
+        <A.AnalysisResultPaper>
+          <A.AnalysisResultHeaderContainer>
+            <A.HeaderLogo src={iMirrorLogo} alt="logo" />
+            <A.HeaderTitle>Analysis Result</A.HeaderTitle>
+            <A.PatientInfoDiv>
+              <A.NameLabel>NAME: </A.NameLabel>
+              <A.PatientName>{patient.memberName}</A.PatientName>
+              <A.BirthDateLabel>BIRTHDATE: </A.BirthDateLabel>
+              <A.PatientBirthDate>{patient.memberBirthDate}</A.PatientBirthDate>
+              <A.GenderLabel>GENDER: </A.GenderLabel>
+              <A.PatientGender>
+                {patient.isMale ? "남자" : "여자"}
+              </A.PatientGender>
+              <A.PatientTestDate>{patient.recentTestDate}</A.PatientTestDate>
+            </A.PatientInfoDiv>
+          </A.AnalysisResultHeaderContainer>
+          <A.LineDiv>
+            <A.Line />
+          </A.LineDiv>
+          <CanvasComponent />
+          <A.ResultTableContainer>
+            <ResultTable patientData={patient} />
+          </A.ResultTableContainer>
+        </A.AnalysisResultPaper>
+        <A.AnalysisResultPaper>
+          <Chart name={patient.memberName} birth={patient.memberBirthDate} />
+        </A.AnalysisResultPaper>
+      </A.AnalysisResultContainer>
+    </A.AnalysisResultLayout>
+  );
+};
+
+export default AnalysisResult;
+
+const ResultTable = ({ patientData }) => {
+  return (
+    <A.ResultTable>
+      <A.ResultTr>
+        <A.ResultTd>1</A.ResultTd>
+        <A.ResultTd>NeckTwisted</A.ResultTd>
+        <A.ResultTd>
+          {patientData.neckTwisted === 0.0 ? "목틀어짐" : "정상"}
+        </A.ResultTd>
+        <A.ResultTd>
+          {patientData && patientData.neckTwisted !== undefined
+            ? patientData.neckTwisted.toString()
+            : "-"}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>2</A.ResultTd>
+        <A.ResultTd>ShoulderRolled</A.ResultTd>
+        <A.ResultTd>
+          {patientData.shoulderRolled === 0.0 ? "어깨 말림" : "정상"}
+        </A.ResultTd>
+        <A.ResultTd>
+          {patientData && patientData.shoulderRolled !== undefined
+            ? patientData.shoulderRolled.toString()
+            : "-"}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>3</A.ResultTd>
+        <A.ResultTd>ShoulderTwisted</A.ResultTd>
+        <A.ResultTd>
+          {patientData.shoulderTwisted === 0.0 ? "어깨틀어짐" : "정상"}
+        </A.ResultTd>
+        <A.ResultTd>
+          {patientData && patientData.shoulderTwisted !== undefined
+            ? patientData.shoulderTwisted.toString()
+            : "-"}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>4</A.ResultTd>
+        <A.ResultTd>허리 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        {/* <A.ResultTd>{patientData.pelvisTwisted}</A.ResultTd> */}
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>5</A.ResultTd>
+        <A.ResultTd>PelvisTwisted</A.ResultTd>
+        <A.ResultTd>
+          {patientData.pelvisTwisted === 0.0 ? "골반틀어짐" : "정상"}
+        </A.ResultTd>
+        <A.ResultTd>
+          {patientData && patientData.pelvisTwisted !== undefined
+            ? patientData.pelvisTwisted.toString()
+            : "-"}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>6</A.ResultTd>
+        <A.ResultTd>엉덩이 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>
+          {patientData.leftKneeRearAngle} / {patientData.rightKneeRearAngle}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>7</A.ResultTd>
+        <A.ResultTd>무릎 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>
+          왼: {patientData.leftKneeRearAngle === 0.0 ? "비정상" : "정상"} / 오:{" "}
+          {patientData.rightKneeRearAngle === 0.0 ? "비정상" : "정상"}
+        </A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>8</A.ResultTd>
+        <A.ResultTd>발목 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>
+          {patientData.leftKneeRearAngle} / {patientData.rightKneeRearAngle}
+        </A.ResultTd>
+      </A.ResultTr>
+    </A.ResultTable>
+  );
+};
+
 const Scene = () => {
   const { scene } = useGLTF("/models/MDA_man.glb");
   const modelRef = useRef();
@@ -69,112 +213,3 @@ const CanvasComponent = () => {
     </A.AvatarLayout>
   );
 };
-
-// ResultTable Component
-const ResultTable = () => {
-  const { koreanName } = useParams();
-  const patient = patientList.find(
-    (patient) => patient.koreanName === koreanName
-  );
-
-  if (!patient) {
-    return null;
-  }
-
-  return (
-    <A.ResultTable>
-      <A.ResultTr>
-        <A.ResultTd>1</A.ResultTd>
-        <A.ResultTd>목 틀어짐</A.ResultTd>
-        <A.ResultTd>앞으로 기울어짐</A.ResultTd>
-        <A.ResultTd>{patient.neckTwisted}</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>2</A.ResultTd>
-        <A.ResultTd>어깨 말림</A.ResultTd>
-        <A.ResultTd>앞으로 말림</A.ResultTd>
-        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>3</A.ResultTd>
-        <A.ResultTd>어깨 틀어짐</A.ResultTd>
-        <A.ResultTd>왼쪽 내려감</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>4</A.ResultTd>
-        <A.ResultTd>허리 틀어짐</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-        <A.ResultTd>20</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>5</A.ResultTd>
-        <A.ResultTd>골반 틀어짐</A.ResultTd>
-        <A.ResultTd>왼쪽다리가 긺</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>6</A.ResultTd>
-        <A.ResultTd>엉덩이 틀어짐</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>7</A.ResultTd>
-        <A.ResultTd>무릎 틀어짐</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
-      </A.ResultTr>
-      <A.ResultTr>
-        <A.ResultTd>8</A.ResultTd>
-        <A.ResultTd>발목 틀어짐</A.ResultTd>
-        <A.ResultTd>-</A.ResultTd>
-        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
-      </A.ResultTr>
-    </A.ResultTable>
-  );
-};
-
-// AnalysisResult Component
-const AnalysisResult = () => {
-  const { koreanName } = useParams();
-  const patient = patientList.find(
-    (patient) => patient.koreanName === koreanName
-  );
-
-  if (!patient) {
-    return <div>Patient not found</div>;
-  }
-
-  return (
-    <A.AnalysisResultLayout>
-      <A.AnalysisResultContainer>
-        <A.AnalysisResultPaper>
-          <A.AnalysisResultHeaderContainer>
-            <A.HeaderLogo src={iMirrorLogo} alt="logo" />
-            <A.HeaderTitle>Analysis Result</A.HeaderTitle>
-            <A.PatientInfoDiv>
-              <A.NameLabel>NAME: </A.NameLabel>
-              <A.PatientName>{patient.koreanName}</A.PatientName>
-              <A.BirthDateLabel>BIRTHDATE: </A.BirthDateLabel>
-              <A.PatientBirthDate>{patient.birthDate}</A.PatientBirthDate>
-              <A.GenderLabel>GENDER: </A.GenderLabel>
-              <A.PatientGender>{patient.gender}</A.PatientGender>
-              <A.PatientTestDate>{patient.testDate}</A.PatientTestDate>
-            </A.PatientInfoDiv>
-          </A.AnalysisResultHeaderContainer>
-          <A.LineDiv>
-            <A.Line />
-          </A.LineDiv>
-          <CanvasComponent />
-          <A.ResultTableContainer>
-            <ResultTable />
-          </A.ResultTableContainer>
-          <Chart name={patient.koreanName} birth={patient.birthDate} />
-        </A.AnalysisResultPaper>
-      </A.AnalysisResultContainer>
-    </A.AnalysisResultLayout>
-  );
-};
-
-export default AnalysisResult;

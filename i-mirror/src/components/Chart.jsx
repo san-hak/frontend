@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { patientList } from '../constant/patientList';
+import useCheckup from '../hooks/auth/useCheckup';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const Chart = ({ name, birth }) => {
   const [charts, setCharts] = useState([]);
+  const { getCheckup } = useCheckup();
 
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       try {
-        const data = patientList.filter(
-          patient => patient.koreanName === name && patient.birthDate === birth
-        );
+        const data = await getCheckup(name, birth);
 
         console.log("Filtered Data:", data);
 
@@ -80,7 +79,7 @@ const Chart = ({ name, birth }) => {
     };
 
     fetchData();
-  }, [name, birth]);
+  }, [name, birth, getCheckup]);
 
   const options = {
     responsive: true,
