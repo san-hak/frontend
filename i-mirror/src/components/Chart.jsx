@@ -100,7 +100,6 @@ const Chart = ({ name, birth }) => {
 
   return (
     <div>
-      <h2>Checkup Data Charts</h2>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {charts.length ? (
           charts.map((chart, index) => (
