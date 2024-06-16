@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as A from "./AnalysisResult.Style";
 import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
+<<<<<<< HEAD
 import useCheckup from "../../hooks/auth/useCheckup";
 
 const AnalysisResult = () => {
@@ -149,6 +150,9 @@ const ResultTable = ({ patientData }) => {
     </A.ResultTable>
   );
 };
+=======
+import Chart from "../../components/Chart";
+>>>>>>> aee6777d5d8b9a48336e15690e56f30b065dadf5
 
 const Scene = () => {
   const { scene } = useGLTF("/models/MDA_man.glb");
@@ -216,4 +220,115 @@ const CanvasComponent = () => {
   );
 };
 
+<<<<<<< HEAD
 // 이제 여따가 서버에서 받은 데이터로 차트 처 만들껀데 그래프 하나에 다 때려 처박을까
+=======
+// ResultTable Component
+const ResultTable = () => {
+  const { koreanName } = useParams();
+  const patient = patientList.find(
+    (patient) => patient.koreanName === koreanName
+  );
+
+  if (!patient) {
+    return null;
+  }
+
+  return (
+    <A.ResultTable>
+      <A.ResultTr>
+        <A.ResultTd>1</A.ResultTd>
+        <A.ResultTd>목 틀어짐</A.ResultTd>
+        <A.ResultTd>앞으로 기울어짐</A.ResultTd>
+        <A.ResultTd>{patient.neckTwisted}</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>2</A.ResultTd>
+        <A.ResultTd>어깨 말림</A.ResultTd>
+        <A.ResultTd>앞으로 말림</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>3</A.ResultTd>
+        <A.ResultTd>어깨 틀어짐</A.ResultTd>
+        <A.ResultTd>왼쪽 내려감</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>4</A.ResultTd>
+        <A.ResultTd>허리 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>20</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>5</A.ResultTd>
+        <A.ResultTd>골반 틀어짐</A.ResultTd>
+        <A.ResultTd>왼쪽다리가 긺</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>6</A.ResultTd>
+        <A.ResultTd>엉덩이 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>7</A.ResultTd>
+        <A.ResultTd>무릎 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+      <A.ResultTr>
+        <A.ResultTd>8</A.ResultTd>
+        <A.ResultTd>발목 틀어짐</A.ResultTd>
+        <A.ResultTd>-</A.ResultTd>
+        <A.ResultTd>왼 3.0 오 2.4</A.ResultTd>
+      </A.ResultTr>
+    </A.ResultTable>
+  );
+};
+
+// AnalysisResult Component
+const AnalysisResult = () => {
+  const { koreanName } = useParams();
+  const patient = patientList.find(
+    (patient) => patient.koreanName === koreanName
+  );
+
+  if (!patient) {
+    return <div>Patient not found</div>;
+  }
+
+  return (
+    <A.AnalysisResultLayout>
+      <A.AnalysisResultContainer>
+        <A.AnalysisResultPaper>
+          <A.AnalysisResultHeaderContainer>
+            <A.HeaderLogo src={iMirrorLogo} alt="logo" />
+            <A.HeaderTitle>Analysis Result</A.HeaderTitle>
+            <A.PatientInfoDiv>
+              <A.NameLabel>NAME: </A.NameLabel>
+              <A.PatientName>{patient.koreanName}</A.PatientName>
+              <A.BirthDateLabel>BIRTHDATE: </A.BirthDateLabel>
+              <A.PatientBirthDate>{patient.birthDate}</A.PatientBirthDate>
+              <A.GenderLabel>GENDER: </A.GenderLabel>
+              <A.PatientGender>{patient.gender}</A.PatientGender>
+              <A.PatientTestDate>{patient.testDate}</A.PatientTestDate>
+            </A.PatientInfoDiv>
+          </A.AnalysisResultHeaderContainer>
+          <A.LineDiv>
+            <A.Line />
+          </A.LineDiv>
+          <CanvasComponent />
+          <A.ResultTableContainer>
+            <ResultTable />
+          </A.ResultTableContainer>
+          <Chart name={patient.koreanName} birth={patient.birthDate} />
+        </A.AnalysisResultPaper>
+      </A.AnalysisResultContainer>
+    </A.AnalysisResultLayout>
+  );
+};
+
+export default AnalysisResult;
+>>>>>>> aee6777d5d8b9a48336e15690e56f30b065dadf5
