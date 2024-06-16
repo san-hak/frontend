@@ -4,14 +4,20 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as A from "./AnalysisResult.Style";
+import * as C from "../../components/ChartStyle";
 import iMirrorLogo from "../../asset/img/i-mirror_logo.svg";
 import useCheckup from "../../hooks/auth/useCheckup";
 import Chart from "../../components/Chart";
+import { Line } from "react-chartjs-2";
+import BackImg from "../../asset/img/Back.svg";
+import { useNavigate } from "react-router-dom";
 
 const AnalysisResult = () => {
   const { koreanName, birthDate } = useParams();
+  const [charts, setCharts] = useState([]);
   const [patient, setPatient] = useState(null);
   const { getCheckup } = useCheckup();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCheckup = async () => {
@@ -24,7 +30,22 @@ const AnalysisResult = () => {
     };
 
     fetchCheckup();
-  }, [koreanName, birthDate, getCheckup]);
+  }, [koreanName, birthDate]);
+
+  const handleDataReady = (charts) => {
+    setCharts(charts);
+  };
+
+  // 배열 분할 함수
+  const chunkArray = (array, size) => {
+    const result = [];
+    for (let i = 0; i < array.length; i += size) {
+      result.push(array.slice(i, i + size));
+    }
+    return result;
+  };
+
+  const chunkedCharts = chunkArray(charts, 4);
 
   if (!patient) {
     return <div>Loading...</div>;
@@ -32,6 +53,7 @@ const AnalysisResult = () => {
 
   return (
     <A.AnalysisResultLayout>
+      <A.Back src={BackImg} alt="뒤로가기" onClick={() => navigate(-1)} />
       <A.AnalysisResultContainer>
         <A.AnalysisResultPaper>
           <A.AnalysisResultHeaderContainer>
@@ -39,9 +61,9 @@ const AnalysisResult = () => {
             <A.HeaderTitle>Analysis Result</A.HeaderTitle>
             <A.PatientInfoDiv>
               <A.NameLabel>NAME: </A.NameLabel>
-              <A.PatientName>{patient.memberName}</A.PatientName>
+              <A.PatientName>{koreanName}</A.PatientName>
               <A.BirthDateLabel>BIRTHDATE: </A.BirthDateLabel>
-              <A.PatientBirthDate>{patient.memberBirthDate}</A.PatientBirthDate>
+              <A.PatientBirthDate>{birthDate}</A.PatientBirthDate>
               <A.GenderLabel>GENDER: </A.GenderLabel>
               <A.PatientGender>
                 {patient.isMale ? "남자" : "여자"}
@@ -57,10 +79,22 @@ const AnalysisResult = () => {
             <ResultTable patientData={patient} />
           </A.ResultTableContainer>
         </A.AnalysisResultPaper>
-        <A.AnalysisResultPaper>
-          <Chart name={patient.memberName} birth={patient.memberBirthDate} />
-        </A.AnalysisResultPaper>
+        {chunkedCharts.map((chartGroup, index) => (
+          <A.AnalysisResultPaper key={index}>
+            {chartGroup.map((chart, chartIndex) => (
+              <C.ChartLayout>
+                <C.ChartRow>
+                  <C.ChartName>{chart.label}</C.ChartName>
+                  <C.ChartDiv key={chartIndex}>
+                    <Line data={chart.data} options={chart.options} />
+                  </C.ChartDiv>
+                </C.ChartRow>
+              </C.ChartLayout>
+            ))}
+          </A.AnalysisResultPaper>
+        ))}
       </A.AnalysisResultContainer>
+      <Chart onDataReady={handleDataReady} />
     </A.AnalysisResultLayout>
   );
 };
@@ -72,7 +106,7 @@ const ResultTable = ({ patientData }) => {
     <A.ResultTable>
       <A.ResultTr>
         <A.ResultTd>1</A.ResultTd>
-        <A.ResultTd>NeckTwisted</A.ResultTd>
+        <A.ResultTd>Neck</A.ResultTd>
         <A.ResultTd>
           {patientData.neckTwisted === 0.0 ? "목틀어짐" : "정상"}
         </A.ResultTd>
@@ -96,7 +130,7 @@ const ResultTable = ({ patientData }) => {
       </A.ResultTr>
       <A.ResultTr>
         <A.ResultTd>3</A.ResultTd>
-        <A.ResultTd>ShoulderTwisted</A.ResultTd>
+        <A.ResultTd>Shoulder</A.ResultTd>
         <A.ResultTd>
           {patientData.shoulderTwisted === 0.0 ? "어깨틀어짐" : "정상"}
         </A.ResultTd>
@@ -106,15 +140,15 @@ const ResultTable = ({ patientData }) => {
             : "-"}
         </A.ResultTd>
       </A.ResultTr>
-      <A.ResultTr>
+      {/* <A.ResultTr>
         <A.ResultTd>4</A.ResultTd>
         <A.ResultTd>허리 틀어짐</A.ResultTd>
         <A.ResultTd>-</A.ResultTd>
-        {/* <A.ResultTd>{patientData.pelvisTwisted}</A.ResultTd> */}
-      </A.ResultTr>
+      <A.ResultTd>{patientData.pelvisTwisted}</A.ResultTd> 
+      </A.ResultTr> */}
       <A.ResultTr>
         <A.ResultTd>5</A.ResultTd>
-        <A.ResultTd>PelvisTwisted</A.ResultTd>
+        <A.ResultTd>Pelvis</A.ResultTd>
         <A.ResultTd>
           {patientData.pelvisTwisted === 0.0 ? "골반틀어짐" : "정상"}
         </A.ResultTd>
@@ -124,31 +158,31 @@ const ResultTable = ({ patientData }) => {
             : "-"}
         </A.ResultTd>
       </A.ResultTr>
-      <A.ResultTr>
+      {/* <A.ResultTr>
         <A.ResultTd>6</A.ResultTd>
         <A.ResultTd>엉덩이 틀어짐</A.ResultTd>
         <A.ResultTd>-</A.ResultTd>
         <A.ResultTd>
           {patientData.leftKneeRearAngle} / {patientData.rightKneeRearAngle}
         </A.ResultTd>
-      </A.ResultTr>
+      </A.ResultTr> */}
       <A.ResultTr>
         <A.ResultTd>7</A.ResultTd>
-        <A.ResultTd>무릎 틀어짐</A.ResultTd>
+        <A.ResultTd>Knee</A.ResultTd>
         <A.ResultTd>-</A.ResultTd>
         <A.ResultTd>
           왼: {patientData.leftKneeRearAngle === 0.0 ? "비정상" : "정상"} / 오:{" "}
           {patientData.rightKneeRearAngle === 0.0 ? "비정상" : "정상"}
         </A.ResultTd>
       </A.ResultTr>
-      <A.ResultTr>
+      {/* <A.ResultTr>
         <A.ResultTd>8</A.ResultTd>
         <A.ResultTd>발목 틀어짐</A.ResultTd>
         <A.ResultTd>-</A.ResultTd>
         <A.ResultTd>
           {patientData.leftKneeRearAngle} / {patientData.rightKneeRearAngle}
         </A.ResultTd>
-      </A.ResultTr>
+      </A.ResultTr> */}
     </A.ResultTable>
   );
 };

@@ -1,5 +1,13 @@
 import styled from "styled-components";
 
+export const Back = styled.img`
+  position: fixed;
+  top: 20px;
+  left: 10px;
+  cursor: pointer;
+  width: 1.5rem;
+`;
+
 export const AnalysisResultLayout = styled.div`
   display: flex;
   justify-content: center;

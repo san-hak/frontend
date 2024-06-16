@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -22,19 +23,20 @@ ChartJS.register(
   Legend
 );
 
-const Chart = ({ name, birth }) => {
+const Chart = ({ onDataReady }) => {
+  const { koreanName, birthDate } = useParams();
   const [charts, setCharts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { getCheckup } = useCheckup();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getCheckup(name, birth);
+        const data = await getCheckup(koreanName, birthDate);
 
-        console.log("Filtered Data:", data);
-
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
           console.error("No data found for the provided name and birth date");
+          setLoading(false);
           return;
         }
 
@@ -63,8 +65,6 @@ const Chart = ({ name, birth }) => {
           "rightKneeRearAngle",
         ];
 
-        const createdAt = data.map((item) => item.createdAt);
-
         const createChartData = (key) => {
           const filteredData = data.filter((item) => item[key] !== null);
           const filteredCreatedAt = filteredData.map((item) => item.createdAt);
@@ -89,16 +89,17 @@ const Chart = ({ name, birth }) => {
           data: createChartData(key),
         }));
 
-        console.log("Generated Charts:", generatedCharts);
-
         setCharts(generatedCharts);
+        setLoading(false);
+        onDataReady(generatedCharts);
       } catch (error) {
         console.error("Error fetching chart data:", error);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [name, birth, getCheckup]);
+  }, [koreanName, birthDate, getCheckup, onDataReady]);
 
   const options = {
     responsive: true,
@@ -116,31 +117,7 @@ const Chart = ({ name, birth }) => {
     },
   };
 
-  return (
-    <div>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
-        {charts.length ? (
-          charts.map((chart, index) => (
-            <div
-              key={index}
-              style={{
-                width: "calc(50% - 10px)",
-                margin: "10px",
-                padding: "10px",
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-              }}
-            >
-              <h3>{chart.label}</h3>
-              <Line data={chart.data} options={options} />
-            </div>
-          ))
-        ) : (
-          <p>Loading data...</p>
-        )}
-      </div>
-    </div>
-  );
+  return null;
 };
 
 export default Chart;
