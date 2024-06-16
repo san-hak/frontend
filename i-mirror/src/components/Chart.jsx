@@ -10,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { patientList } from "../constant/patientList";
+import useCheckup from "../hooks/auth/useCheckup";
 
 ChartJS.register(
   CategoryScale,
@@ -24,14 +24,12 @@ ChartJS.register(
 
 const Chart = ({ name, birth }) => {
   const [charts, setCharts] = useState([]);
+  const { getCheckup } = useCheckup();
 
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       try {
-        const data = patientList.filter(
-          (patient) =>
-            patient.koreanName === name && patient.birthDate === birth
-        );
+        const data = await getCheckup(name, birth);
 
         console.log("Filtered Data:", data);
 
@@ -100,7 +98,7 @@ const Chart = ({ name, birth }) => {
     };
 
     fetchData();
-  }, [name, birth]);
+  }, [name, birth, getCheckup]);
 
   const options = {
     responsive: true,
