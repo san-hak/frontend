@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as S from "./Signup.style.js";
 import { Link } from "react-router-dom";
 import logo from "../../asset/img/Logo.svg";
-import axios from "axios";
+import signup from "../../hooks/auth/signup.js";
 
 function Signup() {
     const navigate = useNavigate();
@@ -59,18 +59,18 @@ function Signup() {
             };
 
             try {
-                const response = await axios.post("/api/auth/register", signupData, { withCredentials: true });
+                const response = await signup(signupData);
                 if (response.status === 201 || response.status === 200) {
                     console.log("회원가입 성공:", response.data);
                     alert("회원가입에 성공했습니다.");
                     navigate("/");
                 } else {
-                    alert("오류가 발생했습니다.");
+                    alert(response.data.message);
                     console.log("오류가 발생: ", response.status, response.data);
                 }
             } catch (error) {
                 console.error("회원가입 요청 중 오류 발생:", error);
-                alert("회원가입 중 오류가 발생했습니다. 다시 시도해주세요.");
+                alert(error.response.data.message);
             }
         } else {
             alert("모든 입력 값을 확인해주세요.");

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import * as L from "./Login.style.js";
 import logo from "../../asset/img/Logo.svg";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import login from "../../hooks/auth/login.js";
 
 function Login() {
     const [name, setName] = useState("");
@@ -14,22 +14,14 @@ function Login() {
     const handleLogin = async (event) => {
         event.preventDefault();
         console.log("로그인 시도 중...");
-        setLoading(true);
-
         try {
-            const response = await axios.post(
-                "/api/auth/login",
-                {
-                    memberName: name,
-                    memberBirthDate: birth,
-                }
-            );
+            const response = await login(name, birth);
             if (response.status === 200) {
                 const result = response.data;
                 sessionStorage.setItem("name", result.memberName);
                 sessionStorage.setItem("role", result.role);
                 console.log("로그인 성공, 이름:" + result.memberName);
-                if (response.data.role === "ROLE_ADMIN"){
+                if (result.role === "ROLE_ADMIN") {
                     navigate("/admin");
                 } else {
                     navigate("/main");
@@ -38,8 +30,8 @@ function Login() {
                 setLoginCheck(true);
             }
         } catch (error) {
-            console.error("로그인 요청 중 오류 발생:", error);
-            alert("입력값을 확인해주세요.");
+            console.error("로그인 요청 중 오류 발생:", error.response.data.message);
+            alert(error.response.data.message);
             setLoginCheck(true);
         } finally {
             setLoading(false);
