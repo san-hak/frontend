@@ -24,7 +24,7 @@ function Login() {
                 if (result.role === "ROLE_ADMIN") {
                     navigate("/admin");
                 } else {
-                    navigate("/main");
+                    navigate("/user");
                 }
             } else {
                 setLoginCheck(true);
